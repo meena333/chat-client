@@ -8,8 +8,8 @@ import UserFormContainer from './components/UserForm/UserFormContainer'
 class App extends React.Component {
 
   //manages received events from the server
-  //source = new EventSource(`https://thawing-hollows-97855.herokuapp.com/stream`)
-  source = new EventSource('http://localhost:5000/stream')
+  source = new EventSource(`https://thawing-hollows-97855.herokuapp.com/stream`)
+  //source = new EventSource('http://localhost:5000/stream')
 
   componentDidMount() {
     this.source.onmessage = (event) => {

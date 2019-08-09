@@ -9,8 +9,8 @@ export default class MessageFormContainer extends React.Component {
   onSubmit = async (event) => {
     event.preventDefault()
     //console.log('this.state.msg', this.state.message)
-    await request.post('http://localhost:5000/message')
-      // await request.post('https://thawing-hollows-97855.herokuapp.com/message')
+    //await request.post('http://localhost:5000/message')
+    await request.post('https://thawing-hollows-97855.herokuapp.com/message')
       .send({
         message: this.state.message,
         user: this.props.user
