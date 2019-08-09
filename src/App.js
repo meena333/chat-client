@@ -1,13 +1,11 @@
 import React from 'react';
 import './App.css';
-import * as request from 'superagent'
+import { allMessages } from './actions'
+import { connect } from 'react-redux';
+import MessageFormContainer from './components/MessageForm/MessageFormContainer'
+import UserFormContainer from './components/UserForm/UserFormContainer'
 
 class App extends React.Component {
-
-  state = {
-    message: '',
-    messages: []
-  }
 
   //manages received events from the server
   //source = new EventSource(`https://thawing-hollows-97855.herokuapp.com/stream`)
@@ -15,45 +13,35 @@ class App extends React.Component {
 
   componentDidMount() {
     this.source.onmessage = (event) => {
-
       //get array from serialized data
       const messages = JSON.parse(event.data)
-
-      this.setState({ messages })
+      this.props.allMessages(messages)
     }
   }
 
-  onSubmit = async (event) => {
-    event.preventDefault()
-    console.log('this.state.msg', this.state.message)
-
-    await request.post('http://localhost:5000/message')
-      // await request.post('https://thawing-hollows-97855.herokuapp.com/message')
-      .send({ message: this.state.message })
-
-    this.setState({ message: '' })
-
-  }
-
-  onChange = (event) => {
-    const { value } = event.target
-    this.setState({ message: value })
-  }
-
   render() {
-    const messages = this.state.messages.map((message, index) => <p key={index}>
-      {message.text}
+    //when going from react to redux, change this.state to this.props
+    const messages = this.props.messages.map((message, index) => <p key={index}>
+      {message.user}: {message.text}
     </p>)
-
-    const form = <form onSubmit={this.onSubmit}>
-      <input type='text' value={this.state.message} onChange={this.onChange} />
-      <button type='submit'>Send</button>
-    </form>
     return <main>
-      {form}
+      <UserFormContainer user={this.props.user} />
+      <MessageFormContainer user={this.props.user} />
       {messages}
     </main>
   }
 }
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    messages: state.messages,
+    user: state.user
+  }
+}
+
+const mapDispatchToProps = {
+  allMessages
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
