@@ -27,7 +27,7 @@ class App extends React.Component {
     event.preventDefault()
     console.log('this.state.msg', this.state.message)
 
-    await request.post('http://localhost:5000/message')
+    await request.post('https://thawing-hollows-97855.herokuapp.com/message')
       .send({ message: this.state.message })
 
     this.setState({ message: '' })
