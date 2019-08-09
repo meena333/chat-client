@@ -10,11 +10,11 @@ class App extends React.Component {
   }
 
   //manages received events from the server
-  source = new EventSource(`https://thawing-hollows-97855.herokuapp.com/stream`)
+  //source = new EventSource(`https://thawing-hollows-97855.herokuapp.com/stream`)
+  source = new EventSource('http://localhost:5000/stream')
 
   componentDidMount() {
     this.source.onmessage = (event) => {
-      //console.log('state test: ', this.state)
 
       //get array from serialized data
       const messages = JSON.parse(event.data)
@@ -27,7 +27,8 @@ class App extends React.Component {
     event.preventDefault()
     console.log('this.state.msg', this.state.message)
 
-    await request.post('https://thawing-hollows-97855.herokuapp.com/message')
+    await request.post('http://localhost:5000/message')
+      // await request.post('https://thawing-hollows-97855.herokuapp.com/message')
       .send({ message: this.state.message })
 
     this.setState({ message: '' })
@@ -41,7 +42,7 @@ class App extends React.Component {
 
   render() {
     const messages = this.state.messages.map((message, index) => <p key={index}>
-      {message}
+      {message.text}
     </p>)
 
     const form = <form onSubmit={this.onSubmit}>
